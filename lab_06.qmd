@@ -45,17 +45,52 @@ met <- met |>
 - [ ] There appears to be a break in the plotted line. Work out where it is by using `coord_cartesian` to zoom in on the $x$ axis, and then check the dataset to identify the root cause. (Hint: look at the `xlim` argument of `coord_cartesian`. The $x$ axis shows dates, so the limits need to be dates too.)
 
 ::: {.solution}
+```{r}
+met |>
+  filter(month == 7 & station == "southampton") |>
+  ggplot(aes(x = year, y = tmax)) +
+  geom_line()
+met
+```
+```{r}
+met |>
+  filter(month == 7 & station == "southampton") |>
+  ggplot(aes(x = year, y = tmax)) +
+  geom_line() + 
+  coord_cartesian(xlim = c(1940,1943))
+# The problem is that in July 1941 no maximum temperature is recorded
+  
+```
 
 :::
 
 Next we look at every month of the year, not just July, at four stations.
 
 - [ ] Produce a scatter plot of the maximum temperature `tmax` against `date` for every month in Southampton, Oxford, Sheffield and Paisley. Colour the points by station.
+
+
 - [ ] Look up the function `geom_smooth`. Use the function to overlay a smooth trend line on the points. Make sure the line is visible by adjusting the `alpha` property on `geom_point`.
 - [ ] What does the line tell you about the trend of historical maximum temperatures?
 
 ::: {.solution}
+```{r}
+met
 
+met |>
+  station = c("southampton", "oxford", "sheffield", "paisley")) |>
+  
+  ggplot(aes(x = year, y = tmax, colour = station)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+
+
+met |>
+  filter(station == c("southampton", "oxford", "sheffield", "paisley"))
+
+met |> 
+  filter(station %in% c("southampton", "oxford", "sheffield", "paisley"))
+```
 :::
 
 The plot above mixes together every month of the year, so the seasonal cycle hides the long-term trend.
@@ -74,10 +109,37 @@ Averaging over each year removes the seasonal cycle, since every (complete) year
 - [ ] Produce a bar chart showing how many monthly records there are for each station, using `geom_bar()`. Then produce the same chart using `count()` and `geom_col()`. (Hint: to make the station names readable, add `theme(axis.text.x = element_text(angle = 45, hjust = 1))` to your plot.)
 
 ::: {.solution}
+```{r}
+met
 
+ggplot(met, aes(x = station)) + 
+  geom_bar() + 
+  theme(axis.text.x = element_text(color = "red",size = 12,angle = 90))
+```
+```{r}
+
+met
+met |>
+  count(station) |>
+  ggplot(aes(x = station, y = n)) + 
+  geom_col() +
+  theme(axis.text.x = element_text(color = "red",size = 12,angle = 90))
+
+
+```
 :::
 
 - [ ] Produce a bar chart showing the average rainfall (across all months and years) for the 5 stations with the highest average rainfall.
+```{r}
+met1 = met |>
+  group_by(station) |>
+  summarise(avg_rain = mean(rain, na.rm = TRUE)) |>
+  arrange(desc(avg_rain)) |>
+  head(5) |>
+  ggplot(met1, aes(x = station)) +
+    geom_bar()
+met1
+```
 - [ ] Now make a *deliberately misleading* version of this plot, which suggests that Cwmystwyth gets several times as much rain as Stornoway. Which of the principles in the Week 6 notes does your plot break? How could a reader spot the trick?
 
 ::: {.solution}
