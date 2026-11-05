@@ -63,7 +63,6 @@ met |>
 ```
 >>>>>>> 1e1f01728a860ab8b52ed42a5a2af044bdc92a78
 
-```
 :::
 
 Next we look at every month of the year, not just July, at four stations.
@@ -79,8 +78,7 @@ Next we look at every month of the year, not just July, at four stations.
 met
 
 met |>
-  station = c("southampton", "oxford", "sheffield", "paisley")) |>
-  
+  station = c("southampton", "oxford", "sheffield", "paisley") |>
   ggplot(aes(x = year, y = tmax, colour = station)) +
   geom_point(alpha = 0.6) +
   geom_smooth(method = "lm") +
@@ -92,6 +90,7 @@ met |>
 
 met |> 
   filter(station %in% c("southampton", "oxford", "sheffield", "paisley"))
+
 ```
 :::
 
@@ -112,13 +111,18 @@ Averaging over each year removes the seasonal cycle, since every (complete) year
 
 ::: {.solution}
 ```{r}
-met
+
+
 
 ggplot(met, aes(x = station)) + 
   geom_bar() + 
   theme(axis.text.x = element_text(color = "red",size = 12,angle = 90))
-```
-```{r}
+
+
+
+
+
+
 
 met
 met |>
@@ -126,8 +130,6 @@ met |>
   ggplot(aes(x = station, y = n)) + 
   geom_col() +
   theme(axis.text.x = element_text(color = "red",size = 12,angle = 90))
-
-
 ```
 :::
 
