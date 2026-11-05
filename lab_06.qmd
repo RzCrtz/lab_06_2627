@@ -45,7 +45,9 @@ met <- met |>
 - [ ] There appears to be a break in the plotted line. Work out where it is by using `coord_cartesian` to zoom in on the $x$ axis, and then check the dataset to identify the root cause. (Hint: look at the `xlim` argument of `coord_cartesian`. The $x$ axis shows dates, so the limits need to be dates too.)
 
 ::: {.solution}
+```{r}
 
+```
 :::
 
 Next we look at every month of the year, not just July, at four stations.
