@@ -46,8 +46,6 @@ met <- met |>
 
 ::: {.solution}
 ```{r}
-<<<<<<< HEAD
-=======
 met |>
   filter(month == 7 & station == "southampton") |>
   ggplot(aes(x = year, y = tmax)) +
