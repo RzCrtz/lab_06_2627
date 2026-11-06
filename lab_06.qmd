@@ -39,6 +39,7 @@ library(tidyverse)
 met <- read_csv("data/MET Office Weather Data.csv")
 met <- met |>
     mutate(date = make_date(year, month, 1))
+met
 ```
 
 - [ ] Produce a line plot showing how the maximum temperature in July recorded in the station in Southampton has changed over time. Add nice labels to your plot.
