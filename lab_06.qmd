@@ -76,23 +76,17 @@ Next we look at every month of the year, not just July, at four stations.
 
 ::: {.solution}
 ```{r}
-met
-
 met |>
-  station = c("southampton", "oxford", "sheffield", "paisley") |>
-  ggplot(aes(x = year, y = tmax, colour = station)) +
+  filter(station %in% c("southampton", "oxford", "sheffield", "paisley")) |>
+  ggplot(aes(x = date , y = tmax, colour = station)) +
   geom_point(alpha = 0.6) +
   geom_smooth(method = "lm") +
   theme_minimal()
+# The line has an upwards slope meaning that for each station the maximum temperature is going up over time on average.
 
-
-met |>
-  filter(station == c("southampton", "oxford", "sheffield", "paisley"))
-
-met |> 
-  filter(station %in% c("southampton", "oxford", "sheffield", "paisley"))
 
 ```
+
 :::
 
 The plot above mixes together every month of the year, so the seasonal cycle hides the long-term trend.
@@ -103,7 +97,45 @@ Averaging over each year removes the seasonal cycle, since every (complete) year
 - [ ] Redraw the plot using only years with a complete set of 12 months. Roughly how much have annual mean maximum temperatures risen at these stations?
 
 ::: {.solution}
+```{r}
+met
+met |>
+  filter(station %in% c("southampton", "oxford", "sheffield", "paisley")) |>
+  group_by(year, station) |>
+  summarise(mean_tmax = mean(tmax, na.rm = TRUE)) |>
+  ggplot(aes(x = year , y = mean_tmax, colour = station)) + 
+  geom_line() + 
+  geom_smooth(method = "lm")
+# the trend is much easier to see now with a clearer upwards slope
 
+met |>
+  filter(station %in% c("southampton", "oxford", "sheffield", "paisley")) |>
+  group_by(year, station) |>
+  summarise(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    n_months = sum(!is.na(tmax))
+  ) |>
+  filter(n_months == 12) |>
+    arrange(desc(mean_tmax))
+
+
+met |>
+  filter(station %in% c("southampton", "oxford", "sheffield", "paisley")) |>
+  group_by(year, station) |>
+  summarise(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    n_months = sum(!is.na(tmax))
+  ) |>
+  filter(n_months == 12) |>
+    arrange(desc(mean_tmax)) |>
+  ggplot(aes(x = year , y = mean_tmax, colour = station)) + 
+  geom_line() + 
+  geom_smooth(method = "lm")
+  
+
+
+# Using the head function to find the years with the highest annual mean nothing stands out as odd, but the using the tail function to find the years with the lowest annual mean, lots of the results have NaN.
+```
 :::
 
 ### Task 2: Rainfall

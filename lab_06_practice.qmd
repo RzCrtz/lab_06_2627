@@ -37,7 +37,23 @@ annual <- met |>
 - [ ] In your scatter plot of monthly maximum temperatures at four stations, adjust the theme to move the legend to the bottom of the plot. (Hint: look for `legend.position` in the help page for `theme`.)
 
 ::: {.solution}
+```{r}
+met |>
+  filter(month == 7 & station == "southampton") |>
+  ggplot(aes(x = year, y = tmax)) +
+  geom_line() +
+  theme_bw()
 
+met |>
+  filter(station %in% c("southampton", "oxford", "sheffield", "paisley")) |>
+  ggplot(aes(x = date , y = tmax, colour = station)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm") +
+  theme_bw() +
+  theme(legend.position = "bottom"
+        [])
+
+```
 :::
 
 ### Task 2: The Seasonal Cycle and Facets
